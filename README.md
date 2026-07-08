@@ -19,3 +19,5 @@ Use os comandos: (`docker run -d --hostname my-rabbit --name some-rabbit -p 8080
 11. Sistema envia e-mail com a nota fiscal
 12. Sistema disponibiliza produtos para entrega
 13. Sistema envia e-mail com dados da entrega
+
+OBS.: Começar executando o service Pagamento.
