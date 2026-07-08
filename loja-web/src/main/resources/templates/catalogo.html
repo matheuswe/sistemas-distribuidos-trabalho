@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Web - Catálogo</title>
+    <style>
+        :root {
+            --bg-primary: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --brand: #2563eb;
+            --brand-hover: #1d4ed8;
+            --success: #10b981;
+            --error-bg: #fef2f2;
+            --error-text: #991b1b;
+            --border: #e2e8f0;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-primary); color: var(--text-main); max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; font-weight: 700; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
+        .erro { background: var(--error-bg); color: var(--error-text); padding: 16px; border-radius: 12px; border: 1px solid #fee2e2; margin-bottom: 24px; font-weight: 500; }
+        .produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+        .card { background: var(--surface); border-radius: 16px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .card h3 { margin: 0 0 10px; font-size: 1.25rem; font-weight: 600; }
+        .card .desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin: 0 0 16px; flex-grow: 1; }
+        .card .estoque { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
+        .card .estoque strong { color: var(--text-main); }
+        .preco { font-size: 1.6rem; font-weight: 700; color: var(--success); margin-bottom: 20px; }
+        .btn { display: block; text-align: center; background: var(--brand); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600; transition: background 0.15s; }
+        .btn:hover { background: var(--brand-hover); }
+    </style>
+</head>
+<body>
+<h1>🛒 Loja Web — Catálogo de Produtos</h1>
+
+<div th:if="${erro}" class="erro" th:text="${erro}"></div>
+
+<div class="produtos">
+    <div class="card" th:each="p : ${produtos}">
+        <h3 th:text="${p.nome}">Produto</h3>
+        <p class="desc" th:text="${p.descricao}">Descrição</p>
+        <p class="estoque">Estoque: <strong th:text="${p.estoque}">0</strong> unidades</p>
+        <div class="preco">R$ <span th:text="${#numbers.formatDecimal(p.preco, 1, 2)}">0,00</span></div>
+        <a th:href="@{/checkout/{id}(id=${p.id})}" class="btn">Comprar</a>
+    </div>
+</div>
+</body>
+</html>

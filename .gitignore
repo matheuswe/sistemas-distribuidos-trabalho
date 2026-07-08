@@ -1,0 +1,17 @@
+# Maven
+target/
+*.class
+
+# IntelliJ IDEA — manter .idea/misc.xml e modules.xml (configuração do projeto)
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/shelf/
+*.iml
+
+# Logs gerados em runtime
+dlq-erros.log
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

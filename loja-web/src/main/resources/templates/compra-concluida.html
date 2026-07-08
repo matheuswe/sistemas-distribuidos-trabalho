@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status do Pedido</title>
+    <style>
+        :root {
+            --bg-primary: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --brand: #2563eb;
+            --brand-hover: #1d4ed8;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-primary); color: var(--text-main); max-width: 550px; margin: 0 auto; padding: 60px 20px; }
+        .card { background: var(--surface); border-radius: 20px; padding: 40px; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); text-align: center; }
+        .icone { font-size: 70px; margin-bottom: 16px; line-height: 1; }
+        h1 { font-size: 1.75rem; font-weight: 700; margin: 0 0 12px; }
+        h1.sucesso { color: var(--success); }
+        h1.erro { color: var(--error); }
+        p { color: var(--text-muted); font-size: 1rem; line-height: 1.6; margin: 0 0 20px; }
+        .detalhe { background: #f8fafc; padding: 20px; border-radius: 12px; margin: 24px 0; text-align: left; border: 1px solid #e2e8f0; }
+        .detalhe p { margin: 6px 0; font-size: 0.95rem; color: var(--text-main); }
+        .alerta-dlq { background: #fef2f2; border: 1px solid #fee2e2; color: #991b1b; padding: 18px; border-radius: 12px; margin: 24px 0; text-align: left; font-size: 0.95rem; line-height: 1.5; }
+        .footer-logs { font-size: 0.8rem; color: var(--text-muted); background: #f1f5f9; padding: 12px; border-radius: 8px; margin-top: 20px; line-height: 1.4; }
+        .btn { display: inline-block; padding: 14px 32px; background: var(--brand); color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: background 0.15s; margin-top: 10px; }
+        .btn:hover { background: var(--brand-hover); }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div th:if="${erroPagamento}">
+        <div class="icone">⏳</div>
+        <h1 class="erro">Valor Negativo Informado</h1>
+        <div class="alerta-dlq">
+            <strong>⚠️ Simulação de Erro:</strong><br>
+            Como o sistema é legado, a Loja Web só grava o pedido no banco — quem confirma
+            se o pagamento foi aceito ou rejeitado (DLQ) é o Gerenciador de Eventos, de forma
+            assíncrona. Acompanhe o status abaixo.<br><br>
+        </div>
+        <p>Item: <strong th:text="${produto}">-</strong> | Montante: <strong th:text="${valor}">-</strong></p>
+    </div>
+
+    <div th:unless="${erroPagamento}">
+        <div class="icone">✅</div>
+        <h1 class="sucesso">Pedido Recebido!</h1>
+        <div class="detalhe">
+            <p><strong>📦 Produto:</strong> <span th:text="${produto}">-</span></p>
+            <p><strong>💰 Valor Pago:</strong> R$ <span th:text="${valor}">-</span></p>
+        </div>
+        <p>Seu pedido foi gravado e está avançando na esteira.<br>As notificações de NF e entrega serão despachadas em breve.</p>
+        <div class="footer-logs">
+            ⛓️ <strong>Rastreamento do Fluxo Assíncrono nos Logs:</strong><br>
+            gerenciador-eventos ➔ pagamento-service ➔ fiscal-service ➔ entrega-service ➔ email-service
+        </div>
+    </div>
+
+    <div class="detalhe" th:if="${pedidoId}">
+        <p><strong>🔖 Nº do Pedido:</strong> <span th:text="${pedidoId}">-</span></p>
+        <p><strong>📡 Status atual:</strong> <span id="status">PENDENTE</span></p>
+    </div>
+
+    <a href="/" class="btn">Voltar à Página Inicial</a>
+</div>
+
+<script th:if="${pedidoId}" th:inline="javascript">
+    const pedidoId = /*[[${pedidoId}]]*/ '';
+
+    function atualizarStatus() {
+        fetch('/pedido/' + pedidoId + '/status')
+            .then(r => r.text())
+            .then(status => {
+                document.getElementById('status').textContent = status;
+                if (status === 'PENDENTE') {
+                    setTimeout(atualizarStatus, 2000);
+                }
+            })
+            .catch(() => {});
+    }
+
+    atualizarStatus();
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+[
+  {
+    "cep": "85900001",
+    "logradouro": "Rua Augusto de Dezembro",
+    "bairro": "Santa Maria",
+    "cidade": "Toledo",
+    "estado": "PR"
+  },
+  {
+    "cep": "85900002",
+    "logradouro": "Avenida Rio Branco",
+    "bairro": "Coopagro",
+    "cidade": "Toledo",
+    "estado": "PR"
+  },
+  {
+    "cep": "85900003",
+    "logradouro": "Rua Sete de Setembro",
+    "bairro": "Centro",
+    "cidade": "Toledo",
+    "estado": "PR"
+  },
+  {
+    "cep": "85900004",
+    "logradouro": "Rua XV de Novembro",
+    "bairro": "Porto Alegre",
+    "cidade": "Toledo",
+    "estado": "PR"
+  },
+  {
+    "cep": "85900005",
+    "logradouro": "Rua Luiz Pena",
+    "bairro": "Europa",
+    "cidade": "Toledo",
+    "estado": "PR"
+  }
+]
